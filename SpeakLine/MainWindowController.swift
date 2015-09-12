@@ -10,6 +10,10 @@ import Cocoa
 
 class MainWindowController: NSWindowController {
 
+    @IBOutlet weak var textField: NSTextField!
+    @IBOutlet weak var speakButton: NSButton!
+    @IBOutlet weak var stopButton: NSButton!
+        
     override func windowDidLoad() {
         super.windowDidLoad()
 
@@ -20,4 +24,19 @@ class MainWindowController: NSWindowController {
         return "MainWindowController"
     }
     
+    // MARK: - Action Methods
+    
+    @IBAction func speakIt(sender: NSButton) {
+        
+        let string = textField.stringValue
+        if string.isEmpty {
+            print("The string from \(textField) is empty.")
+        } else {
+            print("The string is \"\(textField.stringValue)\"")
+        }
+    }
+    
+    @IBAction func stopIt(sender: NSButton) {
+        print("stop button clicked")
+    }
 }
