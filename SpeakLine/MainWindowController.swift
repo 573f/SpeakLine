@@ -15,11 +15,15 @@ class MainWindowController: NSWindowController {
     @IBOutlet weak var stopButton: NSButton!
     
     let speechSynth = NSSpeechSynthesizer()
+    var isStarted: Bool = false {
+        didSet {
+            updateButtons()
+        }
+    }
 
     override func windowDidLoad() {
         super.windowDidLoad()
-
-        // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+        updateButtons()
     }
     
     override var windowNibName: String {
@@ -35,10 +39,22 @@ class MainWindowController: NSWindowController {
             print("The string from \(textField) is empty.")
         } else {
             speechSynth.startSpeakingString(string)
+            isStarted = true
         }
     }
     
     @IBAction func stopIt(sender: NSButton) {
         speechSynth.stopSpeaking()
+        isStarted = false
+    }
+    
+    func updateButtons() {
+        if isStarted {
+            speakButton.enabled = false
+            stopButton.enabled = true
+        } else {
+            speakButton.enabled = true
+            stopButton.enabled = false
+        }
     }
 }
