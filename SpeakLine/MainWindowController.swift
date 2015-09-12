@@ -13,7 +13,9 @@ class MainWindowController: NSWindowController {
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var speakButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
-        
+    
+    let speechSynth = NSSpeechSynthesizer()
+
     override func windowDidLoad() {
         super.windowDidLoad()
 
@@ -32,11 +34,11 @@ class MainWindowController: NSWindowController {
         if string.isEmpty {
             print("The string from \(textField) is empty.")
         } else {
-            print("The string is \"\(textField.stringValue)\"")
+            speechSynth.startSpeakingString(string)
         }
     }
     
     @IBAction func stopIt(sender: NSButton) {
-        print("stop button clicked")
+        speechSynth.stopSpeaking()
     }
 }
