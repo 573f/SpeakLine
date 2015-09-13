@@ -8,11 +8,12 @@
 
 import Cocoa
 
-class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSWindowDelegate, NSTableViewDataSource {
+class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSWindowDelegate, NSTableViewDataSource, NSTableViewDelegate {
 
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var speakButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
+    @IBOutlet weak var tableView: NSTableView!
     
     let speechSynth = NSSpeechSynthesizer()
     let voices = NSSpeechSynthesizer.availableVoices()
@@ -28,6 +29,12 @@ class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSW
         speechSynth.delegate = self
         for voice in voices {
             print(voiceNameForIdendifier(voice)!)
+        }
+        let defaultVoice = NSSpeechSynthesizer.defaultVoice()
+        if let defaultRow = voices.indexOf(defaultVoice) {
+            let indices = NSIndexSet(index: defaultRow)
+            tableView.selectRowIndexes(indices, byExtendingSelection: false)
+            tableView.scrollRowToVisible(defaultRow)
         }
     }
     
@@ -92,5 +99,20 @@ class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSW
         let voice = voices[row]
         let voiceName = voiceNameForIdendifier(voice)
         return voiceName
+    }
+    
+    // MARK: - NSTableViewDelegate Methods
+    
+    func tableViewSelectionDidChange(notification: NSNotification) {
+        let row = tableView.selectedRow
+        
+        // Set the voice back to default if the user has deselected all rows
+        if row == -1 {
+            speechSynth.setVoice(nil)
+            return
+        }
+        
+        let voice = voices[row]
+        speechSynth.setVoice(voice)
     }
 }

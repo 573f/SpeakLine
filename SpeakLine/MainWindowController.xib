@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="speakButton" destination="pMV-st-EYm" id="tTD-kS-Nze"/>
                 <outlet property="stopButton" destination="SFP-vP-zqM" id="3La-Es-oSH"/>
+                <outlet property="tableView" destination="lph-Tc-gkw" id="lGx-ax-iEH"/>
                 <outlet property="textField" destination="XW8-P5-7Pe" id="TDB-1F-XKG"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
@@ -109,6 +110,7 @@
                                     </tableColumns>
                                     <connections>
                                         <outlet property="dataSource" destination="-2" id="pjF-NT-2Yz"/>
+                                        <outlet property="delegate" destination="-2" id="QUA-f5-qBG"/>
                                     </connections>
                                 </tableView>
                             </subviews>
