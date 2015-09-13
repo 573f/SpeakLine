@@ -8,13 +8,14 @@
 
 import Cocoa
 
-class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSWindowDelegate {
+class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSWindowDelegate, NSTableViewDataSource {
 
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var speakButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
     
     let speechSynth = NSSpeechSynthesizer()
+    let voices = NSSpeechSynthesizer.availableVoices()
     var isStarted: Bool = false {
         didSet {
             updateButtons()
@@ -25,6 +26,9 @@ class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSW
         super.windowDidLoad()
         updateButtons()
         speechSynth.delegate = self
+        for voice in voices {
+            print(voiceNameForIdendifier(voice)!)
+        }
     }
     
     override var windowNibName: String {
@@ -58,6 +62,14 @@ class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSW
         }
     }
     
+    func voiceNameForIdendifier(identifier: String) -> String? {
+        let attributes = NSSpeechSynthesizer.attributesForVoice(identifier)
+        guard let voiceName = attributes[NSVoiceName] as? String else {
+            return nil
+        }
+        return voiceName
+     }
+    
     // MARK: - NSSpeechSynthesizer Delegate Methods
     
     func speechSynthesizer(sender: NSSpeechSynthesizer, didFinishSpeaking finishedSpeaking: Bool) {
@@ -68,5 +80,17 @@ class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSW
     
     func windowShouldClose(sender: AnyObject) -> Bool {
         return !isStarted
+    }
+    
+    // MARK: - NSTableViewDataSource Methods
+    
+    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+        return voices.count
+    }
+    
+    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
+        let voice = voices[row]
+        let voiceName = voiceNameForIdendifier(voice)
+        return voiceName
     }
 }
