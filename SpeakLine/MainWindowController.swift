@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class MainWindowController: NSWindowController {
+class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate {
 
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var speakButton: NSButton!
@@ -24,6 +24,7 @@ class MainWindowController: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
         updateButtons()
+        speechSynth.delegate = self
     }
     
     override var windowNibName: String {
@@ -45,7 +46,6 @@ class MainWindowController: NSWindowController {
     
     @IBAction func stopIt(sender: NSButton) {
         speechSynth.stopSpeaking()
-        isStarted = false
     }
     
     func updateButtons() {
@@ -56,5 +56,11 @@ class MainWindowController: NSWindowController {
             speakButton.enabled = true
             stopButton.enabled = false
         }
+    }
+    
+    // MARK: - NSSpeechSynthesizer Delegate Methods
+    
+    func speechSynthesizer(sender: NSSpeechSynthesizer, didFinishSpeaking finishedSpeaking: Bool) {
+        isStarted = false
     }
 }
