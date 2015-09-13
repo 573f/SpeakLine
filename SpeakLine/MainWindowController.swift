@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate {
+class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate, NSWindowDelegate {
 
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var speakButton: NSButton!
@@ -62,5 +62,11 @@ class MainWindowController: NSWindowController, NSSpeechSynthesizerDelegate {
     
     func speechSynthesizer(sender: NSSpeechSynthesizer, didFinishSpeaking finishedSpeaking: Bool) {
         isStarted = false
+    }
+    
+    // MARK: - NSWindow Delegate Methods
+    
+    func windowShouldClose(sender: AnyObject) -> Bool {
+        return !isStarted
     }
 }
